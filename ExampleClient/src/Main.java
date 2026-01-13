@@ -1,11 +1,10 @@
-import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Scanner;
-import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
 
 public class Main {
     public static void main(String[] agrs) throws IOException, URISyntaxException, InterruptedException {
@@ -22,7 +21,7 @@ public class Main {
 
         Interface Ui = new Interface(reader, writer);
         Ui.checkUUID();
-        while(!client.contains("/exit")){
+        while (!client.contains("/exit")) {
             Scanner sc = new Scanner(System.in);
             System.out.print("/");
             client = "/" + sc.nextLine();
@@ -30,4 +29,4 @@ public class Main {
         }
         socket.close();
     }
- }
+}

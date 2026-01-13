@@ -1,12 +1,8 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class Metods {
 
@@ -37,9 +33,9 @@ public class Metods {
         StringBuilder result = new StringBuilder();
         if (list.size() == 0) {
             result.append("У вас нету ссылок");
-        }else {
+        } else {
             for (int i = 0; i < list.size(); i++) {
-            result.append(list.get(i)).append("\n");
+                result.append(list.get(i)).append("\n");
             }
         }
         return result.toString();
@@ -65,7 +61,7 @@ public class Metods {
         String id = createUrl.substring(Server.BASE_SHORT_URL.length());
         ShortUrl shortUrl = Server.urlDatebase.get(id);
         StringBuilder result = new StringBuilder();
-        if (shortUrl.isActive == false) {
+        if (!shortUrl.isActive) {
             result.append(shortUrl.status);
         } else {
             shortUrl.currentClicks++;
@@ -119,9 +115,7 @@ public class Metods {
 
     public static boolean validUrl(String createUrl) {
         String id = createUrl.substring(Server.BASE_SHORT_URL.length());
-        if (!Server.urlDatebase.containsKey(id))
-            return false;
-        return true;
+        return Server.urlDatebase.containsKey(id);
     }
 
     public static String parseMes(String line, String userUUID) { // Обработка пресланных команд клиентом
@@ -130,10 +124,10 @@ public class Metods {
         String com = words[0].trim().toLowerCase();
         if (com.contains("/create")) {
             int clicklimit = 0;
-            if(words.length <= 2) clicklimit = Server.DEFAULT_CLICK_LIMIT;
+            if (words.length <= 2) clicklimit = Server.DEFAULT_CLICK_LIMIT;
             else clicklimit = Integer.parseInt(words[2]);
             try {
-                if(words.length <= 2) clicklimit = Server.DEFAULT_CLICK_LIMIT;
+                if (words.length <= 2) clicklimit = Server.DEFAULT_CLICK_LIMIT;
                 else clicklimit = Integer.parseInt(words[2]);
             } catch (NumberFormatException e) {
                 clicklimit = Server.DEFAULT_CLICK_LIMIT;
@@ -142,7 +136,7 @@ public class Metods {
         } else if (com.contains("/delete")) {
             result.append(deleteShortUrl(userUUID, words[1].trim()));
         } else if (com.contains("/info")) {
-            if(words.length >= 2) result.append(infoOfLink(words[1].trim()));
+            if (words.length >= 2) result.append(infoOfLink(words[1].trim()));
             else result.append("Неизвестная команда");
         } else if (com.contains("/mylinks")) {
             result.append(infoAllLinkUser(userUUID));
@@ -150,10 +144,8 @@ public class Metods {
             result.append(openShortUrl(words[1]));
         } else if (com.contains("/exit")) {
             result.append("Соединение разоравано");
-        }else result.append("Неизвестная команда");
+        } else result.append("Неизвестная команда");
         result.append("\n***");
         return result.toString();
-        }
-
-
+    }
 }
